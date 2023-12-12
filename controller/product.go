@@ -64,7 +64,8 @@ func GetProductByID(c echo.Context) error {
 	// Respond with a JSON message
 	return c.JSON(http.StatusOK, map[string]string{
 		"message": "Product fetched successfully",
-		"id":      strconv.Itoa(product.PRICE),
+		"id":      strconv.Itoa(product.ID),
 		"name":    product.NAME,
+		"price":   strconv.Itoa(product.PRICE),
 	})
 }

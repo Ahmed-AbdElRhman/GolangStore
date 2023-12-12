@@ -11,11 +11,11 @@ import (
 )
 
 const (
-	host     = "localhost"
+	host     = "postgres_container"
 	port     = 5432
 	user     = "postgres"
 	password = "1234"
-	dbname   = "postgres"
+	dbname   = "test"
 )
 
 var db *sql.DB
@@ -42,8 +42,9 @@ func CloseDB() {
 }
 
 func InsertProduct(product *models.Product) error {
-	query := "INSERT INTO product (name) VALUES ($1)"
-	_, err := db.Query(query, product.NAME)
+	query := "INSERT INTO product (name,price) VALUES ($1,$2)"
+	fmt.Printf("Insert {$1}{$2}"+product.NAME, product.PRICE)
+	_, err := db.Query(query, product.NAME, product.PRICE)
 	if err != nil {
 		log.Println("Error inserting product:", err)
 		return err
@@ -55,8 +56,8 @@ func InsertProduct(product *models.Product) error {
 
 func GetProductByID(id int) (models.Product, error) {
 	var product models.Product
-	query := "SELECT id, name FROM product WHERE id = $1"
-	err := db.QueryRow(query, id).Scan(&product.PRICE, &product.NAME)
+	query := "SELECT id, name,price FROM product WHERE id = $1"
+	err := db.QueryRow(query, id).Scan(&product.ID, &product.NAME, &product.PRICE)
 	if err != nil {
 		log.Println("Error getting product:", err)
 		return models.Product{}, err
